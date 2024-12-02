@@ -102,10 +102,22 @@ exports.render = function(data) {
 	
 	const capt = (str) => str[0].toUpperCase() + str.slice(1);
 	
+	const fmclo = [
+		'</select>',
+		'<button>Show all in category</button>',
+		'</form>',
+		'</div>'
+	].join(' ');
+	
 	const menu = fmope + cats.map(word => {
-		return '<option value="' + word + '">' + capt(word) + '</option>';
-	}).join('') + ('</select> <button>Show all in category</button> </form> ' +
-			'</div>');
+		return [
+			'<option value="',
+			word,
+			'">',
+			capt(word),
+			'</option>'
+		].join('');
+	}).join('') + fmclo;
 			
 	const card = (link) => '<div class="card">' + link + '</div>';
 	
