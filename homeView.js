@@ -2,56 +2,9 @@ const title = 'Media server on the home network';
 
 const message = 'TV recordings';
 
-const cats = [
-	'sleep',
-	'all',
-	'bible',
-	'classic',
-	'TCM',
-	'trailer',
-	'history',
-	'epic',
-	'sci-fi',
-	'doctor who',
-	'pbs',
-	'biography',
-	'foreign',
-	'italian',
-	'independent',
-	'indie',
-	'comedy',
-	'Shock Theater',
-	'upsetting',
-	'commercials',
-	'myth',
-	'fantasy',
-	'favorites',
-	'Christmas',
-	'holiday',
-	'Rankin Bass',
-	'Star Trek',
-	'action',
-	'natural',
-	'disaster',
-	'superhero',
-	'indiana jones',
-	'hero',
-	'narnia',
-	'christian',
-	'german',
-	'chefs',
-	'cooking',
-	'romance',
-	'calming',
-	'Dick Proenneke',
-	'nature',
-	'mystery',
-	'parade',
-	'documentary',
-	'star wars'
-];
+const cats = require('./catsView.js');
 
-exports.initCat = { cat: cats[0] };
+exports.initCat = { cat: cats.list[0] };
 
 exports.render = function(data) {
 	const doc = [
@@ -109,7 +62,7 @@ exports.render = function(data) {
 		'</div>'
 	].join(' ');
 	
-	const menu = fmope + cats.map(word => {
+	const menu = fmope + cats.list.map(word => {
 		return [
 			'<option value="',
 			word,
