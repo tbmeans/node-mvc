@@ -68,9 +68,9 @@ exports.render = function(value, data) {
 		return [
 			'<option value="',
 			word,
-			'">',
+			'"',
+			word === value && ' selected>' || '>',
 			capt(word),
-			word === value && "selected" || '',
 			'</option>'
 		].join('');
 	}).join('') + fmclo;
