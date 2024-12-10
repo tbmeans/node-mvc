@@ -6,7 +6,9 @@ const cats = require('./catsView.js');
 
 exports.initCat = { cat: cats.list[0] };
 
-exports.render = function(data) {
+// Param "value" is the value for the query key "cat"
+// Param "data" is the data obtained from the model using the "value"
+exports.render = function(value, data) {
 	const doc = [
 		'<!DOCTYPE html> <html lang="en"> <head> ',
 		'<meta charset="utf-8" /> ',
@@ -68,6 +70,7 @@ exports.render = function(data) {
 			word,
 			'">',
 			capt(word),
+			word === value && "selected" || '',
 			'</option>'
 		].join('');
 	}).join('') + fmclo;
