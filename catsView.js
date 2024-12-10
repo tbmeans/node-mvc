@@ -1,6 +1,6 @@
 exports.list = [
-	'sleep',
 	'all',
+	'sleep',
 	'bible',
 	'classic',
 	'TCM',
