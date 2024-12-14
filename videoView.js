@@ -21,6 +21,8 @@ exports.render = function(id, title, isCc) {
         '<body> ',
         //'<video controls autoplay name="media"> ',
         //'<source src="Videos/' + id + '.mp4" type="video/mp4"> ',
+        // this could just bring in the whole path instead of breaking down into id
+        // and putting path and extension pieces back onto it after removing them
         //isCc > 0 && track || '',
         //'</video> ',
         '</body> '
