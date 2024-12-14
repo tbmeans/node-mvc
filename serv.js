@@ -1,5 +1,6 @@
 const http = require('http');
 const qstr = require('querystring');
+const fs = require('node:fs');
 
 const hostname = '127.0.0.1';
 const port = 8080;
@@ -22,17 +23,20 @@ const serv = http.createServer((req, res) => {
 		const reqIsForMP4 = req.url.includes('.mp4');
 		const reqIsQuery = req.url[1] = '?';
 
-		res.statusCode = 200;
-		res.setHeader('Content-Type', 'text/html');
+//		res.statusCode = 200;
+//		res.setHeader('Content-Type', 'text/html');
 
 		if (reqIsForMP4) {
 			// Remove route name "Videos" and slashes and ".mp4" ext
-			const id = req.url.slice(VIDEOROUTE.length, -4);
-			res.end(video.controller(id));
+			//const id = req.url.slice(VIDEOROUTE.length, -4);
+			//res.end(video.controller(id));
+			fs.readFile();
 		} else {
 			// Home and video routes both display all video links.
 			const qobj = reqIsQuery && qstr.parse(req.url) || initItem;
 			const qkey = Object.keys(qobj)[0];
+			res.statusCode = 200;
+			res.setHeader('Content-Type', 'text/html');
 			res.end(home.controller(qobj[qkey]));
 		}
 	} catch (e) {
