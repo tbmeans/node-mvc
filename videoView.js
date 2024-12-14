@@ -19,10 +19,10 @@ exports.render = function(id, title, isCc) {
 	
 	const bod = [
         '<body> ',
-        '<video controls autoplay name="media"> ',
-        '<source src="Videos/' + id + '.mp4" type="video/mp4"> ',
-        isCc > 0 && track || '',
-        '</video> ',
+        //'<video controls autoplay name="media"> ',
+        //'<source src="Videos/' + id + '.mp4" type="video/mp4"> ',
+        //isCc > 0 && track || '',
+        //'</video> ',
         '</body> '
     ].join('');
 	
