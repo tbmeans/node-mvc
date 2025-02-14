@@ -10,24 +10,21 @@ exports.render = function(id, title, isCc) {
 	const sty = [
 		'<style> ',
         'body{ background: black; text-align: center; } ',
-        'video{ position: relative; top: 25%; } ',
+        'video{ padding-top: 10rem; } ',
         '</style> </head> '
 	].join('');
 
-    const track = '<track default kind="captions" src="Videos/' + id +
-            '.vtt"> ';
+    const track = ('<track default kind="captions" src="/Videos/' + id +
+            '.vtt">');
 	
 	const bod = [
-        '<body> ',
-        //'<video controls autoplay name="media"> ',
-        //'<source src="Videos/' + id + '.mp4" type="video/mp4"> ',
-        // this could just bring in the whole path instead of breaking down into id
-        // and putting path and extension pieces back onto it after removing them
-        //isCc > 0 && track || '',
-        //'</video> ',
-        '</body> '
+        '<body>',
+        '<video controls autoplay name="media">',
+        '<source src="/Videos/' + id + '.mp4" type="video/mp4">',
+        isCc > 0 && track || '',
+        '</video>',
+        '</body>'
     ].join('');
 	
 	return doc + sty + bod + '</html>';
 };
-
