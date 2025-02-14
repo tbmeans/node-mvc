@@ -1,7 +1,7 @@
 const model = require('./tvrecModel.js');
 const view = require('./videoView.js');
 
-const props = model.list[0];
+const props = Object.keys(model.list[0]);
 
 exports.controller = function(id) {
     const rec = model.query(id);
