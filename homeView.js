@@ -1,8 +1,8 @@
-const title = 'Media server on the home network';
+const TITLE = 'Media server on the home network';
 
-const message = 'TV recordings';
+const MESSAGE = 'TV recordings';
 
-const cats = require('./catsView.js');
+const cats = require('./cats.js');
 
 exports.initCat = { cat: cats.list[0] };
 
@@ -34,15 +34,15 @@ exports.render = function(value, data) {
 		'.card{ width: 400px; } } </style> </head> '
 	].join('');
 	
-	const stock = (doc + '<title>' + title + '</title>' +
+	const stock = (doc + '<title>' + TITLE + '</title>' +
 			sty + '<body> <div class="hero"> <h1>' +
-					message + '</h1> </div> ');
+					MESSAGE + '</h1> </div> ');
 					
 	const close = '</body> </html>';
 	
 	const ankr = (linkdat) => {
-		const open = '<a href="Videos/' + linkdat.whenrec + '.mp4">';
-		const aimg = ('<img src="img/' + linkdat.whenrec + '.png" ' +
+		const open = '<a href="/Videos/' + linkdat.whenrec + '/">';
+		const aimg = ('<img src="/img/' + linkdat.whenrec + '.png" ' +
 				'alt="' + linkdat.title + '">'); 
 		const ahed = '<h3>' + linkdat.title + '</h3>'; 
 		return open + aimg + ahed + '</a>';
@@ -83,4 +83,3 @@ exports.render = function(value, data) {
 	
 	return stock + menu + bodat + close;
 };
-
