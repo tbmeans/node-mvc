@@ -2,12 +2,13 @@ const http = require('http');
 const qstr = require('querystring');
 const fs = require('node:fs');
 
-const hostname = '127.0.0.1';
+const hostname = '0.0.0.0'; // all 0s to get out to LAN; orig. had '127.0.0.1';
 const port = 8080;
 
 const mimeTypes = {
 	"mp4": "video/mp4",
-	"png": "image/png"
+	"png": "image/png",
+	"txt": "text/plain", // for quick transfer of journals to laptop
 };
 const fileExtensions = Object.keys(mimeTypes);
 
