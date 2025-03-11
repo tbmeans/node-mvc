@@ -34,7 +34,8 @@ const serv = http.createServer(function(req, res) {
 
 	if (fileExtensions.includes(reqFxt)) {
 		// Request is for a file.
-		fs.readFile('.' + req.url, function(error, content) {
+		const path = Object.keys(qstr.decode(req.url))[0];
+		fs.readFile('.' + path, function(error, content) {
 			if (error) {
 				if (error.code === 'ENOENT') {
 					res.writeHead(404);
