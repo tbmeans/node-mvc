@@ -9,6 +9,7 @@ const mimeTypes = {
 	"mp4": "video/mp4",
 	"png": "image/png",
 	"txt": "text/plain", // for quick transfer of journals to laptop
+	"zip": "application/zip",
 };
 const fileExtensions = Object.keys(mimeTypes);
 
