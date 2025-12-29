@@ -1,6 +1,7 @@
 const http = require('http');
 const qstr = require('querystring');
 const fs = require('node:fs');
+const url = require('node:url');
 
 const hostname = '0.0.0.0'; // all 0s to get out to LAN; orig. had '127.0.0.1';
 const port = 8080;
@@ -9,7 +10,27 @@ const mimeTypes = {
 	"mp4": "video/mp4",
 	"png": "image/png",
 	"txt": "text/plain", // for quick transfer of journals to laptop
+	// more types of files for transfer from dev pc to personal pc
 	"zip": "application/zip",
+	"htm": "text/html; charset=UTF-8", 
+	"html": "text/html; charset=UTF-8", // if ever want an index.html
+	"js": "text/javascript", // user may download code
+	"css": "text/css",
+	"scss": "text/css",
+	"jpg": "image/jpeg",
+	"jpeg": "image/jpeg",
+	"gif": "image/gif",
+	"ico": "image/x-icon",
+	"svg": "image/svg+xml",
+	"gz": "application/gzip",
+	"7z": "application/x-7z-compressed",
+	"tar": "application/x-tar",
+	"xz": "appilcation/x-xz",
+	"xml": "application/xml",
+	"pdf": "application/pdf",
+	"sha256": "text/plain",
+	"deb": "application/octet-stream",
+	"sh": "text/plain",
 };
 const fileExtensions = Object.keys(mimeTypes);
 
@@ -29,14 +50,15 @@ const serv = http.createServer(function(req, res) {
 	 * Home and "Video" route followed by empty path will yield the 
 	 * same response. 
 	 */
-  const dotIndex = req.url.lastIndexOf('.');
-  const reqFxt = req.url.slice(dotIndex + 1).replaceAll('/', '');
-  const isQueryStr = req.url.includes('?');
+	const reqUrl = url.parse(req.url);
+	const reqPath = reqUrl.pathname;
+  const dotIndex = reqPath.lastIndexOf('.');
+  const reqFxt = dotIndex > 1 ? reqPath.slice(dotIndex + 1) : '';
+  const isQueryStr = reqPath.includes('?');
 
 	if (fileExtensions.includes(reqFxt)) {
 		// Request is for a file.
-		const path = Object.keys(qstr.decode(req.url))[0];
-		fs.readFile('.' + path, function(error, content) {
+		fs.readFile('.' + reqPath, function(error, content) {
 			if (error) {
 				if (error.code === 'ENOENT') {
 					res.writeHead(404);
