@@ -1,8 +1,6 @@
 *.swp
 cats.js
 tvrecs.js
-*.mp4
-*.vtt
-*.png
-*.txt
-*.zip
+transfer/
+Videos/
+img/
