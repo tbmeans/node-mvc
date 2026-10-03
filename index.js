@@ -1,10 +1,9 @@
 const http = require('http');
-const qstr = require('querystring');
 const fs = require('node:fs');
-const url = require('node:url');
 
 const hostname = '0.0.0.0'; // all 0s to get out to LAN; orig. had '127.0.0.1';
 const port = 8080;
+const intraddr = `http://${hostname}:${port}/`;
 
 const mimeTypes = {
 	"mp4": "video/mp4",
@@ -38,9 +37,9 @@ const fileExtensions = Object.keys(mimeTypes);
 const home = require('./homeController.js');
 const vids = require('./videoController.js');
 
-const VID = "/Videos/"
-
-const initItem = home.initCat;
+const VID_ROUTE = "Videos"
+const QUERY_KEY = 'cat';
+const INIT_QUERY_VAL = home.initCat;
 
 const serv = http.createServer(function(req, res) {
 	/* Request is either for an mp4 or png file through the video route,
@@ -50,11 +49,12 @@ const serv = http.createServer(function(req, res) {
 	 * Home and "Video" route followed by empty path will yield the 
 	 * same response. 
 	 */
-	const reqUrl = url.parse(req.url);
+	const reqUrl = new URL(req.url, intraddr);
 	const reqPath = reqUrl.pathname;
   const dotIndex = reqPath.lastIndexOf('.');
   const reqFxt = dotIndex > 1 ? reqPath.slice(dotIndex + 1) : '';
-  const isQueryStr = reqPath.includes('?');
+	const videoId = reqUrl.pathname.includes(VID_ROUTE) &&
+			reqUrl.pathname.split('/').at(-1)
 
 	if (fileExtensions.includes(reqFxt)) {
 		// Request is for a file.
@@ -72,28 +72,28 @@ const serv = http.createServer(function(req, res) {
 				res.end(content, 'utf-8');
 			}
 		});
-	} else if (req.url.includes(VID) && req.url.length > VID.length &&
-        isQueryStr === false) {
-		/* request contains a video id */
-		const id = req.url.replace(VID, '').replaceAll('/', '');
+	} else if (videoId && videoId !== VID_ROUTE) {
+		// Neither exactly /Videos/ nor exactly /Videos
+		// but had /Videos/<something>.
 		res.statusCode = 200;
 		res.setHeader('Content-Type', 'text/html');
-		res.end(vids.controller(id));
-	} else if (req.url === '/' || req.url === VID || isQueryStr) {
-		// Request has no video ID but possibly a query string.
-		// Home and Videos routes both display all video links.
-		const qobj = isQueryStr && qstr.parse(req.url) || initItem;
-		const qkey = Object.keys(qobj)[0];
+		res.end(vids.controller(videoId));
+	} else if (videoId === VID_ROUTE || reqPath === `/${VID_ROUTE}/` ||
+				reqPath === '/' || reqUrl.search.length) {
+		// Paths '/Videos', '/Videos/' and home/index get home page w/all videos.
+		// Query string filters all videos.
+		const queryValue = reqUrl.searchParams.get(QUERY_KEY) || INIT_QUERY_VAL;
 		res.statusCode = 200;
 		res.setHeader('Content-Type', 'text/html');
-		res.end(home.controller(qobj[qkey]));
+		res.end(home.controller(queryValue));
 	} else {
-		res.statusCode = 404;
-		res.setHeader('Content-Type', 'text/plain');
-		res.end('"' + req.url + '" ' + http.STATUS_CODES[404]);
+		// Toss the bad route and go home.
+		res.statusCode = 301;
+		res.setHeader('Location', (new URL('/', intraddr)).href);
+		res.end();
 	}
 });
 
 serv.listen(port, hostname, () => {
-	console.log(`Server running at http://${hostname}:${port}/`);
+	console.log(`Server running at ${intraddr}`);
 });
