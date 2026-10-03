@@ -4,7 +4,7 @@ const MESSAGE = 'TV recordings';
 
 const cats = require('./cats.js');
 
-exports.initCat = { cat: cats.list[0] };
+exports.initCat = cats.list[0];
 
 // Param "value" is the value for the query key "cat"
 // Param "data" is the data obtained from the model using the "value"
@@ -83,7 +83,7 @@ exports.render = function(value, data) {
       ${data.map(rec => {
         return (rec && `
           <div class="card">
-            <a href="/Videos/${rec.whenrec}/">
+            <a href="/Videos/${rec.whenrec}">
               <img src="/img/${rec.whenrec}.png" alt="${rec.title}">
               <h3>${rec.title}</h3>
             </a>
@@ -95,3 +95,31 @@ exports.render = function(value, data) {
 </html>
 `);
 };
+
+/* Advice on slash trailing after slug
+https://boldist.co/search-engine-marketing/how-to-write-a-slug/
+https://www.customerimpact.be/en/blog/url-slug/
+
+When fixing the project 20261002, my natural assumption
+is that my video-ID-as-slug pointing to displaying a 
+single video playback in browser should NOT have a trailing
+slash but I had decided the opposite here originally. 
+Took trailing slash out of the <a> href here 20261002
+because the references say that traditionally, slugs pointing to specific
+files or single articles, as mine will do, don't have trailing slashes, 
+and a trailing slash reflects a directory in server file structure,
+and I guess the view for server directory should be an index page that
+directs you to however many pages, articles, and resources that live in
+that particular server directory, with the home page index being an 
+exception in that it's proper url does not have a trailing slash.
+
+Fixing this trailing slash was fine and all but it did not solve the
+problem of the VIDEO VIEW no longer working. See the model takes a 
+video id and returns an object which then causes the data.map in this
+HOME VIEW to fail. Home view is looking for the tvrecs data array subset
+not a single object from that array! So the problem was how 20261002
+I combined handling of video ID with query and home and 
+/Videos/ by the home controller. So rolling back to handle video ID 
+in a condition separate from home/filters/allvideos so that the video
+controller can be employed.  
+*/
